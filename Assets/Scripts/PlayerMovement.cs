@@ -8,16 +8,24 @@ public class PlayerMovement : MonoBehaviour
 {
 
     public float movementSpeed = 5f;
-
     public Rigidbody2D rb;
-
 	Vector2 moveDirection = Vector2.zero;
 
-    public PlayerControls input;
+    private PlayerControls input;
 	private InputAction move;
 	private InputAction fire;
 	private InputAction dash;
 	private InputAction interact;
+
+	//dash
+	private float activeMoveSpeed;
+	public float dashSpeed;
+
+	public float dashLength = .5f;
+	public float dashCooldown = 1f;
+
+	private float dashCounter;
+	private float dashCoolCounter;
 
 	private void Awake() {
 		input = new PlayerControls();
@@ -64,8 +72,16 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	private void Dash(InputAction.CallbackContext context) {
-		Debug.Log("Zoom");
+		Vector2 mousePos = Mouse.current.position.ReadValue();
+
+		Debug.Log("Zoom to " + mousePos);
 	}
+
+	private IEnumerator EDash() {
+		canDash = false;
+		isDashing = true;
+	}
+
 
 	private void Interact(InputAction.CallbackContext context) {
 		Debug.Log("poke");
