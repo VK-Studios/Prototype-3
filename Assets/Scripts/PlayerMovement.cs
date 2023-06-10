@@ -16,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
     public PlayerControls input;
 	private InputAction move;
 	private InputAction fire;
+	private InputAction dash;
+	private InputAction interact;
 
 	private void Awake() {
 		input = new PlayerControls();
@@ -24,10 +26,24 @@ public class PlayerMovement : MonoBehaviour
 	private void OnEnable() {
 		move = input.Player.Move;
 		move.Enable();
+
+		fire = input.Player.Fire;
+		fire.Enable();
+		fire.performed += Fire;
+
+		dash = input.Player.Dash;
+		dash.Enable();
+		dash.performed += Dash;
+
+		interact = input.Player.Interact;
+		interact.Enable();
+		interact.performed += Interact;
 	}
 
 	private void OnDisable() {
 		move.Disable();
+		fire.Disable();
+		interact.Disable();
 	}
 
 	// Update is called once per frame
@@ -40,5 +56,18 @@ public class PlayerMovement : MonoBehaviour
 	private void FixedUpdate() {
 		//movement
 		rb.velocity = new Vector2(moveDirection.x * movementSpeed, moveDirection.y * movementSpeed);
+	}
+
+
+	private void Fire(InputAction.CallbackContext context) {
+		Debug.Log("Bazinga");
+	}
+
+	private void Dash(InputAction.CallbackContext context) {
+		Debug.Log("Zoom");
+	}
+
+	private void Interact(InputAction.CallbackContext context) {
+		Debug.Log("poke");
 	}
 }
