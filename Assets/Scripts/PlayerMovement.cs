@@ -11,13 +11,15 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D rb;
 	Vector2 moveDirection = Vector2.zero;
 
-    private PlayerControls input;
+	private PlayerControls input;
 	private InputAction move;
 	private InputAction fire;
 	private InputAction dash;
 	private InputAction interact;
 
 	//dash
+	Vector2 dashDirection = Vector2.zero;
+
 	private float activeMoveSpeed;
 	public float dashSpeed;
 
@@ -29,6 +31,10 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Awake() {
 		input = new PlayerControls();
+	}
+
+	private void Start() {
+		activeMoveSpeed = movementSpeed;
 	}
 
 	private void OnEnable() {
@@ -55,15 +61,36 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	void Update()
-    {
-        //input
-		moveDirection = move.ReadValue<Vector2>();
+	void Update() {
+		//input
+		
+		if (dashCounter == dashLength) {
+			dashDirection = move.ReadValue<Vector2>();
+		}
+		
+		if (dashCounter > 0) {
+			dashCounter -= Time.deltaTime;
+
+			
+			moveDirection = dashDirection;
+
+			if (dashCounter <= 0) {
+				activeMoveSpeed = movementSpeed;
+				dashCoolCounter = dashCooldown;
+			}
+
+		} else {
+			moveDirection = move.ReadValue<Vector2>();
+		}
+
+		if(dashCoolCounter > 0) {
+			dashCoolCounter -= Time.deltaTime;
+		}
     }
 
 	private void FixedUpdate() {
 		//movement
-		rb.velocity = new Vector2(moveDirection.x * movementSpeed, moveDirection.y * movementSpeed);
+		rb.velocity = new Vector2(moveDirection.x * activeMoveSpeed, moveDirection.y * activeMoveSpeed);
 	}
 
 
@@ -72,14 +99,12 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	private void Dash(InputAction.CallbackContext context) {
-		Vector2 mousePos = Mouse.current.position.ReadValue();
+		
+		if(dashCoolCounter <= 0 && dashCounter <= 0) {
+			activeMoveSpeed = dashSpeed;
+			dashCounter = dashLength;
+		}
 
-		Debug.Log("Zoom to " + mousePos);
-	}
-
-	private IEnumerator EDash() {
-		canDash = false;
-		isDashing = true;
 	}
 
 
