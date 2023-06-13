@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
 	private InputAction dash;
 	private InputAction interact;
 
+	private Animator anim;
+
 	//dash
 	Vector2 dashDirection = Vector2.zero;
 
@@ -31,12 +33,15 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Awake() {
 		input = new PlayerControls();
+		anim = GetComponent<Animator>();
 	}
 
 	private void Start() {
 		activeMoveSpeed = movementSpeed;
 	}
 
+	// User input code init
+	// Using new input system, not old one
 	private void OnEnable() {
 		move = input.Player.Move;
 		move.Enable();
@@ -62,7 +67,6 @@ public class PlayerMovement : MonoBehaviour
 
 	// Update is called once per frame
 	void Update() {
-		//input
 		
 		if (dashCounter == dashLength) {
 			dashDirection = move.ReadValue<Vector2>();
@@ -80,7 +84,11 @@ public class PlayerMovement : MonoBehaviour
 			}
 
 		} else {
+			//IMPORTANT MOVEMENT CODE 
 			moveDirection = move.ReadValue<Vector2>();
+
+			anim.SetInteger("xInput", Mathf.RoundToInt(moveDirection.x));
+			anim.SetInteger("yInput", Mathf.RoundToInt(moveDirection.y));
 		}
 
 		if(dashCoolCounter > 0) {
