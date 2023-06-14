@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
+
 public class PlayerMovement : MonoBehaviour
 {
 
@@ -15,7 +16,6 @@ public class PlayerMovement : MonoBehaviour
 	private InputAction move;
 	private InputAction fire;
 	private InputAction dash;
-	private InputAction interact;
 
 	private Animator anim;
 
@@ -53,16 +53,12 @@ public class PlayerMovement : MonoBehaviour
 		dash = input.Player.Dash;
 		dash.Enable();
 		dash.performed += Dash;
-
-		interact = input.Player.Interact;
-		interact.Enable();
-		interact.performed += Interact;
 	}
 
 	private void OnDisable() {
 		move.Disable();
 		fire.Disable();
-		interact.Disable();
+		
 	}
 
 	// Update is called once per frame
@@ -113,10 +109,5 @@ public class PlayerMovement : MonoBehaviour
 			dashCounter = dashLength;
 		}
 
-	}
-
-
-	private void Interact(InputAction.CallbackContext context) {
-		Debug.Log("poke");
 	}
 }
