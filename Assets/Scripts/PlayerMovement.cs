@@ -17,7 +17,8 @@ public class PlayerMovement : MonoBehaviour
 	private InputAction fire;
 	private InputAction dash;
 
-	private Animator anim;
+	public Animator legsAnim;
+	public Animator torsoAnim;
 
 	//dash
 	Vector2 dashDirection = Vector2.zero;
@@ -33,7 +34,6 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Awake() {
 		input = new PlayerControls();
-		anim = GetComponent<Animator>();
 	}
 
 	private void Start() {
@@ -83,8 +83,8 @@ public class PlayerMovement : MonoBehaviour
 			//IMPORTANT MOVEMENT CODE 
 			moveDirection = move.ReadValue<Vector2>();
 
-			anim.SetInteger("xInput", Mathf.RoundToInt(moveDirection.x));
-			anim.SetInteger("yInput", Mathf.RoundToInt(moveDirection.y));
+			legsAnim.SetInteger("xInput", Mathf.RoundToInt(moveDirection.x));
+			legsAnim.SetInteger("yInput", Mathf.RoundToInt(moveDirection.y));
 		}
 
 		if(dashCoolCounter > 0) {
