@@ -17,7 +17,10 @@ public class PlayerMovement : MonoBehaviour
 	private InputAction fire;
 	private InputAction dash;
 
-	private Animator anim;
+	public Animator legsAnim;
+	public Animator torsoAnim;
+	private float dir = 1f;
+	private float mDir = 1f;
 
 	//dash
 	Vector2 dashDirection = Vector2.zero;
@@ -31,17 +34,24 @@ public class PlayerMovement : MonoBehaviour
 	private float dashCounter;
 	private float dashCoolCounter;
 
+	private Vector3 mousePos;
+	private Vector3 objPos;
+
+	public float atkCooldown = .5f;
+	private float atkCoolCounter = 0;
+	public int atkDamage;
+
 	private void Awake() {
 		input = new PlayerControls();
-		anim = GetComponent<Animator>();
 	}
 
 	private void Start() {
 		activeMoveSpeed = movementSpeed;
+		
 	}
 
 	// User input code init
-	// Using new input system, not old one
+	// Using new input system, not old one 
 	private void OnEnable() {
 		move = input.Player.Move;
 		move.Enable();
@@ -83,14 +93,73 @@ public class PlayerMovement : MonoBehaviour
 			//IMPORTANT MOVEMENT CODE 
 			moveDirection = move.ReadValue<Vector2>();
 
-			anim.SetInteger("xInput", Mathf.RoundToInt(moveDirection.x));
-			anim.SetInteger("yInput", Mathf.RoundToInt(moveDirection.y));
+			legsAnim.SetInteger("xInput", Mathf.RoundToInt(moveDirection.x));
+			legsAnim.SetInteger("yInput", Mathf.RoundToInt(moveDirection.y));
+
+			if (moveDirection.x == 0 && moveDirection.y >= 0.01) {
+				//up
+				dir = 1;
+				//Debug.Log("1");
+			} else if (moveDirection.x == 0 && moveDirection.y <= -0.01) {
+				//down
+				dir = 2;
+				//Debug.Log("2");
+			} else if (moveDirection.x >= 0.01) {
+				//right
+				dir = 3;
+				//Debug.Log("3");
+			} else if (moveDirection.x <= -0.01) {
+				//left
+				dir = 4;
+				//Debug.Log("4");
+			}
+
+			legsAnim.SetFloat("lastInput", dir);
+
+			if (moveDirection.x != 0 || moveDirection.y != 0) {
+				legsAnim.SetBool("isMoving", true);
+			} else {
+				legsAnim.SetBool("isMoving", false);
+			}
 		}
 
 		if(dashCoolCounter > 0) {
 			dashCoolCounter -= Time.deltaTime;
 		}
-    }
+
+		if (atkCoolCounter > 0) {
+			atkCoolCounter -= Time.deltaTime;
+		}
+
+		updateAnims();
+		
+	}
+
+	private void updateAnims() {
+		mousePos = Mouse.current.position.value;
+
+		mousePos.z = 5.23f;
+
+		objPos = Camera.main.WorldToScreenPoint(transform.position);
+		mousePos.x = mousePos.x - objPos.x;
+		mousePos.y = mousePos.y - objPos.y;
+
+		float angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
+		Debug.Log(angle);
+
+		if (angle > -45 && angle < 45) {
+			mDir = 1;
+		} else if (angle >= 45 && angle <= 135) {
+			mDir = 4;
+		} else if (angle > 135 || angle < -135) {
+			mDir = 2;
+		} else if (angle <= -45 && angle >= -135) {
+			mDir = 3;
+		}
+
+		torsoAnim.SetFloat("Dir", mDir);
+
+	}
 
 	private void FixedUpdate() {
 		//movement
@@ -99,7 +168,12 @@ public class PlayerMovement : MonoBehaviour
 
 
 	private void Fire(InputAction.CallbackContext context) {
-		Debug.Log("Bazinga");
+
+		if (atkCoolCounter <= 0) {
+			torsoAnim.SetTrigger("attack");
+			atkCoolCounter = atkCooldown;
+		}
+		
 	}
 
 	private void Dash(InputAction.CallbackContext context) {
