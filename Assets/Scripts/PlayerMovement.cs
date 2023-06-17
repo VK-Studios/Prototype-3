@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
 
 	public Animator legsAnim;
 	public Animator torsoAnim;
+	private float dir = 1f;
 
 	//dash
 	Vector2 dashDirection = Vector2.zero;
@@ -85,6 +86,32 @@ public class PlayerMovement : MonoBehaviour
 
 			legsAnim.SetInteger("xInput", Mathf.RoundToInt(moveDirection.x));
 			legsAnim.SetInteger("yInput", Mathf.RoundToInt(moveDirection.y));
+
+			if (moveDirection.x == 0 && moveDirection.y >= 0.01) {
+				//up
+				dir = 1;
+				//Debug.Log("1");
+			} else if (moveDirection.x == 0 && moveDirection.y <= -0.01) {
+				//down
+				dir = 2;
+				//Debug.Log("2");
+			} else if (moveDirection.x >= 0.01) {
+				//right
+				dir = 3;
+				//Debug.Log("3");
+			} else if (moveDirection.x <= -0.01) {
+				//left
+				dir = 4;
+				//Debug.Log("4");
+			}
+
+			legsAnim.SetFloat("lastInput", dir);
+
+			if (moveDirection.x != 0 || moveDirection.y != 0) {
+				legsAnim.SetBool("isMoving", true);
+			} else {
+				legsAnim.SetBool("isMoving", false);
+			}
 		}
 
 		if(dashCoolCounter > 0) {
