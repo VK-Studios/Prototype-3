@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private Vector3 mousePos;
 	private Vector3 objPos;
-
+ 
 	public float atkCooldown = .5f;
 	private float atkCoolCounter = 0;
 	public int atkDamage;
