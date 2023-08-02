@@ -14,7 +14,6 @@ public class PlayerMovement : MonoBehaviour
 
 	private PlayerControls input;
 	private InputAction move;
-	private InputAction fire;
 	private InputAction dash;
 
 	public Animator legsAnim;
@@ -56,10 +55,6 @@ public class PlayerMovement : MonoBehaviour
 		move = input.Player.Move;
 		move.Enable();
 
-		fire = input.Player.Fire;
-		fire.Enable();
-		fire.performed += Fire;
-
 		dash = input.Player.Dash;
 		dash.Enable();
 		dash.performed += Dash;
@@ -67,8 +62,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private void OnDisable() {
 		move.Disable();
-		fire.Disable();
-		
+		dash.Disable();
 	}
 
 	// Update is called once per frame
@@ -131,11 +125,13 @@ public class PlayerMovement : MonoBehaviour
 			atkCoolCounter -= Time.deltaTime;
 		}
 
-		updateAnims();
 		
+
+		torsoAnim.SetFloat("Dir", updateAnims());
+
 	}
 
-	private void updateAnims() {
+	private float updateAnims() {
 		mousePos = Mouse.current.position.value;
 
 		mousePos.z = 5.23f;
@@ -157,7 +153,7 @@ public class PlayerMovement : MonoBehaviour
 			mDir = 3;
 		}
 
-		torsoAnim.SetFloat("Dir", mDir);
+		return mDir;
 
 	}
 
