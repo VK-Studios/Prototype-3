@@ -35,10 +35,6 @@ public class PlayerMovement : MonoBehaviour
 
 	private Vector3 mousePos;
 	private Vector3 objPos;
- 
-	public float atkCooldown = .5f;
-	private float atkCoolCounter = 0;
-	public int atkDamage;
 
 	private void Awake() {
 		input = new PlayerControls();
@@ -121,9 +117,7 @@ public class PlayerMovement : MonoBehaviour
 			dashCoolCounter -= Time.deltaTime;
 		}
 
-		if (atkCoolCounter > 0) {
-			atkCoolCounter -= Time.deltaTime;
-		}
+		
 
 		
 
@@ -163,14 +157,6 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 
-	private void Fire(InputAction.CallbackContext context) {
-
-		if (atkCoolCounter <= 0) {
-			torsoAnim.SetTrigger("attack");
-			atkCoolCounter = atkCooldown;
-		}
-		
-	}
 
 	private void Dash(InputAction.CallbackContext context) {
 		
