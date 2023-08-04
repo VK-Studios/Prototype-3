@@ -30,10 +30,10 @@ public class PlayerInput : MonoBehaviour
 
 	}
 
-	void Start()
+	void Awake()
     {
-        
-    }
+		input = new PlayerControls();
+	}
 
 
     void Update()

@@ -856,6 +856,7 @@ GameObject:
   - component: {fileID: 1002627497}
   - component: {fileID: 1002627499}
   - component: {fileID: 1002627498}
+  - component: {fileID: 1002627500}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -927,8 +928,21 @@ MonoBehaviour:
   dashSpeed: 10
   dashLength: 0.3
   dashCooldown: 1
+--- !u!114 &1002627500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002627496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b75e4a2095cd1da4189878dc36e5677f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  torsoAnim: {fileID: 739453410}
   atkCooldown: 0.5
-  atkDamage: 0
+  atkDamage: 20
 --- !u!1 &1308385390
 GameObject:
   m_ObjectHideFlags: 0
